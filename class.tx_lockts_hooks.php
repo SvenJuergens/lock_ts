@@ -43,32 +43,31 @@ class tx_lockts_hooks {
 
    public function checklock($parameters, $pObj) {
 
-        if ($parameters['e']['config'] || $parameters['e']['constants']) {
+		if ($parameters['e']['config'] || $parameters['e']['constants']) {
 		
-            $rec = t3lib_BEfunc::getRecord('sys_template', $parameters['tplRow']['uid'], 'tx_lockts_lock');
-            if($rec['tx_lockts_lock'] == 1) {
-                 $pObj->pObj->doc->JScodeArray[] = $this->replaceButtonsJS();
-            }
+			$rec = t3lib_BEfunc::getRecord('sys_template', $parameters['tplRow']['uid'], 'tx_lockts_lock');
+			if($rec['tx_lockts_lock'] == 1) {
+				 $pObj->pObj->doc->JScodeArray[] = $this->replaceButtonsJS();
+			}
 			
 		 }else {
 		
-            // we are in the Tempplate overview
+			// we are in the Tempplate overview
+			// check if there was send the command to lock/ unlock the template
+			$this->updateLock = t3lib_div::_GET('lock_ts');
 
-            // check if there was send the command to lock/ unlock the template
-            $this->updateLock = t3lib_div::_GET('lock_ts');
-
-            // update template record
-            if(isset($this->updateLock) && $this->canBeInterpretedAsInteger( $this->updateLock )) {
-                $GLOBALS['TYPO3_DB']->exec_UpdateQuery(
-                    'sys_template',
-                    'uid = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($parameters['tplRow']['uid'], 'sys_template'),
-                    array('tx_lockts_lock' => ($this->updateLock == 1 ? 1 : 0))
-                );
-            }
+			// update template record
+			if(isset($this->updateLock) && $this->canBeInterpretedAsInteger( $this->updateLock )) {
+				$GLOBALS['TYPO3_DB']->exec_UpdateQuery(
+					'sys_template',
+					'uid = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($parameters['tplRow']['uid'], 'sys_template'),
+					array('tx_lockts_lock' => ($this->updateLock == 1 ? 1 : 0))
+				);
+			}
 			
-            // get templaterecord and check if we must set the "LOCK TS" field "checked"
-            $rec = t3lib_BEfunc::getRecord('sys_template', $parameters['tplRow']['uid'], 'tx_lockts_lock');
-            $additionalInput = '
+			// get templaterecord and check if we must set the "LOCK TS" field "checked"
+			$rec = t3lib_BEfunc::getRecord('sys_template', $parameters['tplRow']['uid'], 'tx_lockts_lock');
+			$additionalInput = '
 				<div id="lock-ts">
 						<input type="checkbox" class="checkbox" id="lock_ts" onclick="window.location.href=window.location.href+\'&lock_ts=\'+(this.checked?1:2)" value="1" '
 						 . ($rec['tx_lockts_lock'] == 1 ? ' checked="checked"' : '') . '/>
@@ -76,10 +75,10 @@ class tx_lockts_hooks {
 				</div>	
 			';
 
-            $parameters['theOutput'] .= $additionalInput;
-       
-       }
-    }
+			$parameters['theOutput'] .= $additionalInput;
+	   
+	   }
+	}
 	// Javasript for replacing the buttons
 	public function replaceButtonsJS($wrap=0) {
 			$out = '';
@@ -135,5 +134,3 @@ class tx_lockts_hooks {
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/lock_ts/class.tx_lockts_hooks.php']) {
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/lock_ts/class.tx_lockts_hooks.php']);
 }
-
-?>
