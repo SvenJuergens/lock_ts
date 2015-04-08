@@ -28,17 +28,16 @@ $GLOBALS['LANG']->includeLLFile('EXT:lock_ts/locallang_db.xml');
 class Tceforms {
 
 	public function getSingleField_postProcess($table, $field, $row, &$out, $PA, $pObj) {
-	
-		if($table['sys_template'] && $field =='tx_lockts_lock' && $row['tx_lockts_lock'] == 1){
-			$out = $this->replaceButtonsJS(1);
+		
+		if( $table == 'sys_template' && $field =='tx_lockts_lock' && $row['tx_lockts_lock'] == 1){
+			$out = $this->replaceButtonsJS(TRUE);
 		}
 	
 	}	
 
-   public function checklock($parameters, $pObj) {
+   public function checkLock($parameters, $pObj) {
 
 		if ($parameters['e']['config'] || $parameters['e']['constants']) {
-		
 			$rec = BackendUtility::getRecord('sys_template', $parameters['tplRow']['uid'], 'tx_lockts_lock');
 			if($rec['tx_lockts_lock'] == 1) {
 				 $pObj->pObj->doc->JScodeArray[] = $this->replaceButtonsJS();
@@ -54,18 +53,20 @@ class Tceforms {
 			if(isset($this->updateLock) && MathUtility::canBeInterpretedAsInteger( $this->updateLock )) {
 				$GLOBALS['TYPO3_DB']->exec_UpdateQuery(
 					'sys_template',
-					'uid = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($parameters['tplRow']['uid'], 'sys_template'),
-					array('tx_lockts_lock' => ($this->updateLock == 1 ? 1 : 0))
+					'uid = ' . (int)$parameters['tplRow']['uid'],
+					array(
+						'tx_lockts_lock' => ( $this->updateLock == 1 ? 1 : 0 )
+					)
 				);
 			}
 			
 			// get templaterecord and check if we must set the "LOCK TS" field "checked"
-			$rec = BackendUtility::getRecord('sys_template', $parameters['tplRow']['uid'], 'tx_lockts_lock');
+			$rec = BackendUtility::getRecord('sys_template', (int)$parameters['tplRow']['uid'], 'tx_lockts_lock');
 			$additionalInput = '
-				<div id="lock-ts">
-						<input type="checkbox" class="checkbox" id="lock_ts" onclick="window.location.href=window.location.href+\'&lock_ts=\'+(this.checked?1:2)" value="1" '
+				<div class="lock-ts">
+						<input type="checkbox" style="display:inline-block"; class="checkbox" id="lock_ts" onclick="window.location.href=window.location.href+\'&lock_ts=\'+(this.checked?1:2)" value="1" '
 						 . ($rec['tx_lockts_lock'] == 1 ? ' checked="checked"' : '') . '/>
-					<label for="lock_ts"> ' . $GLOBALS['LANG']->getLL('sys_template.locktstemplate', 1) . ' </label><br />
+						<label for="lock_ts"> ' . $GLOBALS['LANG']->getLL('sys_template.locktstemplate', 1) . ' </label><br />
 				</div>	
 			';
 
@@ -74,7 +75,7 @@ class Tceforms {
 	   }
 	}
 	// Javasript for replacing the buttons
-	public function replaceButtonsJS($wrap=0) {
+	public function replaceButtonsJS( $wrap = FALSE ) {
 			$out = '';
 			$replaceText = '';
 			$replaceText = '<div style=\"font-weight:bold;height:20px;line-height:20px;\">'; 
@@ -95,7 +96,7 @@ class Tceforms {
 			
 			';
 		
-		if($wrap == 1){
+		if( $wrap === TRUE ){
 				$out = '<script type="text/javascript">
 					/*<![CDATA[*/
 					' . $out . '

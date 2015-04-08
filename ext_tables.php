@@ -14,10 +14,10 @@ $tempColumns = array (
 );
 
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('sys_template', $tempColumns,1);
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('sys_template', $tempColumns);
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('sys_template','tx_lockts_lock;;;;1-1-1');
 
 if ( TYPO3_MODE == 'BE') {
 	$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/tstemplate_info/class.tx_tstemplateinfo.php']['postOutputProcessingHook'][] =
-	'SvenJuergens\\LockTs\\Hooks\\Tceforms->checklock';
+	'SvenJuergens\\LockTs\\Hooks\\Tceforms->checkLock';
 }
