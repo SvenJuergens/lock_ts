@@ -17,7 +17,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 
-$GLOBALS['LANG']->includeLLFile('EXT:lock_ts/locallang_db.xml');
 
 /**
  * Administration controller
@@ -27,9 +26,18 @@ $GLOBALS['LANG']->includeLLFile('EXT:lock_ts/locallang_db.xml');
  */
 class Tceforms {
 
+	/**
+	 * Path to the locallang file
+	 *
+	 * @var string
+	 */
+	const LLPATH = 'LLL:EXT:lock_ts/Resources/Private/Language/locallang_db.xlf:';
+
+
+
 	public function getSingleField_postProcess($table, $field, $row, &$out, $PA, $pObj) {
 		
-		if( $table == 'sys_template' && $field =='tx_lockts_lock' && $row['tx_lockts_lock'] == 1){
+		if( $table == 'sys_template' && $field == 'tx_lockts_lock' && $row['tx_lockts_lock'] == 1){
 			$out = $this->replaceButtonsJS(TRUE);
 		}
 	
@@ -38,8 +46,8 @@ class Tceforms {
    public function checkLock($parameters, $pObj) {
 
 		if ($parameters['e']['config'] || $parameters['e']['constants']) {
-			$rec = BackendUtility::getRecord('sys_template', $parameters['tplRow']['uid'], 'tx_lockts_lock');
-			if($rec['tx_lockts_lock'] == 1) {
+			$record = BackendUtility::getRecord('sys_template', (int)$parameters['tplRow']['uid'], 'tx_lockts_lock');
+			if($record['tx_lockts_lock'] == 1) {
 				 $pObj->pObj->doc->JScodeArray[] = $this->replaceButtonsJS();
 			}
 			
@@ -61,12 +69,12 @@ class Tceforms {
 			}
 			
 			// get templaterecord and check if we must set the "LOCK TS" field "checked"
-			$rec = BackendUtility::getRecord('sys_template', (int)$parameters['tplRow']['uid'], 'tx_lockts_lock');
+			$record = BackendUtility::getRecord('sys_template', (int)$parameters['tplRow']['uid'], 'tx_lockts_lock');
 			$additionalInput = '
 				<div class="lock-ts">
-						<input type="checkbox" style="display:inline-block"; class="checkbox" id="lock_ts" onclick="window.location.href=window.location.href+\'&lock_ts=\'+(this.checked?1:2)" value="1" '
-						 . ($rec['tx_lockts_lock'] == 1 ? ' checked="checked"' : '') . '/>
-						<label for="lock_ts"> ' . $GLOBALS['LANG']->getLL('sys_template.locktstemplate', 1) . ' </label><br />
+						<input type="checkbox" style="display:inline-block;margin:0 2px 0 0;vertical-align:middle"; class="checkbox" id="lock_ts" onclick="window.location.href=window.location.href+\'&lock_ts=\'+(this.checked?1:2)" value="1" '
+						 . ($record['tx_lockts_lock'] == 1 ? ' checked="checked"' : '') . '/>
+						<label for="lock_ts"> ' . $GLOBALS['LANG']->sL( self::LLPATH . 'sys_template.locktstemplate') . ' </label><br />
 				</div>	
 			';
 
@@ -76,11 +84,9 @@ class Tceforms {
 	}
 	// Javasript for replacing the buttons
 	public function replaceButtonsJS( $wrap = FALSE ) {
-			$out = '';
-			$replaceText = '';
-			$replaceText = '<div style=\"font-weight:bold;height:20px;line-height:20px;\">'; 
-			$replaceText .= $GLOBALS['LANG']->getLL('sys_template.replacedSubmitText');
-			$replaceText .= '</div>';
+			$replaceText = '<strong>'; 
+			$replaceText .= htmlspecialchars( $GLOBALS['LANG']->sL( self::LLPATH . 'sys_template.replacedSubmitText'));
+			$replaceText .= '</strong>';
 			
 			$out .= '
 				document.observe(\'dom:loaded\', function () {

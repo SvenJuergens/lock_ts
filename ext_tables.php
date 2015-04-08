@@ -6,7 +6,7 @@ if (!defined ('TYPO3_MODE')) {
 $tempColumns = array (
 	'tx_lockts_lock' => array (		
 		'exclude' => 0,		
-		'label' => 'LLL:EXT:lock_ts/locallang_db.xml:sys_template.tx_lockts_lock',		
+		'label' => 'LLL:EXT:lock_ts/Resources/Private/Language/locallang_db.xlf:sys_template.tx_lockts_lock',		
 		'config' => array (
 			'type' => 'check',
 		)

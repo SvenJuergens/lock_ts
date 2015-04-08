@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2015-04-08T11:20:03Z" product-name="">
+		<header/>
+		<body>
+			<trans-unit id="sys_template.replacedSubmitText" xml:space="preserve" approved="yes">
+				<source>Template locked</source>
+				<target>Template ist gesperrt</target>
+			</trans-unit>
+			<trans-unit id="sys_template.locktstemplate" xml:space="preserve" approved="yes">
+				<source>lock TypoScript Template</source>
+				<target>TypoScript Template speeren</target>
+			</trans-unit>
+			<trans-unit id="sys_template.tx_lockts_lock" xml:space="preserve" approved="yes">
+				<source>lock</source>
+				<target>speeren</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
