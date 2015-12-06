@@ -35,17 +35,18 @@ class Tceforms {
 
 
 	public function getSingleField_postProcess($table, $field, $row, &$out, $PA, $pObj) {
-
 		if( $table == 'sys_template' && $field == 'tx_lockts_lock' && $row['tx_lockts_lock'] == 1){
-			$out = $this->replaceButtonsJS();
+			$out .= $this->replaceButtonsJS();
 		}
 	}
 
 	public function checkLock($parameters, $pObj) {
 		if ($parameters['e']['config'] || $parameters['e']['constants']) {
+			/*ToDo muss der record abgefragt werden, oder kann direkt $parameters['tplRow']['tx_lockts_lock'] genutzt werden  ?*/
 			$record = BackendUtility::getRecord('sys_template', (int)$parameters['tplRow']['uid'], 'tx_lockts_lock');
 			if($record['tx_lockts_lock'] == 1) {
-				$pObj->pObj->doc->postCode .= $this->replaceButtonsJS();
+				$parameters['theOutput'] .= $this->replaceButtonsJS();
+				//$pObj->pObj->doc->postCode .= $this->replaceButtonsJS();
 			}
 		 }else {
 			// we are in the Tempplate overview
@@ -77,19 +78,29 @@ class Tceforms {
 	}
 	// Javasript for replacing the buttons
 	public function replaceButtonsJS( ) {
-			$replaceText = '<strong>';
+			$replaceText = '<strong class="btn">';
 			$replaceText .= htmlspecialchars( $GLOBALS['LANG']->sL( self::LLPATH . 'sys_template.replacedSubmitText'));
 			$replaceText .= '</strong>';
+			$replaceText = GeneralUtility::quoteJSvalue($replaceText);
 
-			$out .= '
-			<script type="text/javascript">
-				(function(){
+			if( version_compare(TYPO3_branch, '7.5', '>=') ){
+				$javascript .= '
+					TYPO3.jQuery(".t3js-splitbutton").hide().after(' . $replaceText . ');
+				';
+			}else{
+				$javascript = '
 					var buttonGroups = document.querySelectorAll(".buttongroup");
-					buttonGroups[1].innerHTML = "' . $replaceText . '";
+					buttonGroups[1].innerHTML = ' . $replaceText . ';
 					buttonGroups[2].innerHTML="";
+				';
+		}
+
+		return $out .= '
+			<script type="text/javascript" charset="utf-8">
+				(function(){
+					' . $javascript .'
 				})()
 			</script>
-			';
-		return $out;
+		';
 	}
 }
