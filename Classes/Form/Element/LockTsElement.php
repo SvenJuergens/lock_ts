@@ -23,35 +23,36 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class LockTsElement extends AbstractFormElement
 {
 
-	/**
-	 * Path to the locallang file
-	 *
-	 * @var string
-	 */
-	const LLPATH = 'LLL:EXT:lock_ts/Resources/Private/Language/locallang_db.xlf:';
+    /**
+     * Path to the locallang file
+     *
+     * @var string
+     */
+    const LLPATH = 'LLL:EXT:lock_ts/Resources/Private/Language/locallang_db.xlf:';
 
-	/**
+    public $resultArray;
+
+    /**
      * Render t3editor element
      *
      * @return array As defined in initializeResultArray() of AbstractNode
      */
     public function render()
     {
-    	$this->resultArray = $this->initializeResultArray();
-    	if( (int)$this->data['databaseRow']['tx_lockts_lock'] === 1){
+        $this->resultArray = $this->initializeResultArray();
+        if ((int)$this->data['databaseRow']['tx_lockts_lock'] === 1) {
+            $replaceText = '<strong class="btn">';
+            $replaceText .= htmlspecialchars($GLOBALS['LANG']->sL(self::LLPATH . 'sys_template.replacedSubmitText'));
+            $replaceText .= '</strong>';
+            $replaceText = GeneralUtility::quoteJSvalue($replaceText);
 
-    		$replaceText = '<strong class="btn">';
-			$replaceText .= htmlspecialchars( $GLOBALS['LANG']->sL( self::LLPATH . 'sys_template.replacedSubmitText'));
-			$replaceText .= '</strong>';
-			$replaceText = GeneralUtility::quoteJSvalue($replaceText);
-
-			$this->resultArray['additionalJavaScriptPost'][] = '
+            $this->resultArray['additionalJavaScriptPost'][] = '
 		    	TYPO3.jQuery(document).ready(function(){
 		    		TYPO3.jQuery(".t3js-splitbutton").text(" ").next(".btn-group").text(" ").after(' . $replaceText . ');
 		    	});
 	    	';
-    	}
+        }
 
-    	return $this->resultArray;
+        return $this->resultArray;
     }
 }

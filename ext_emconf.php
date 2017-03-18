@@ -10,29 +10,29 @@
  * writing. "version" and "dependencies" must not be touched!
  ***************************************************************/
 
-$EM_CONF[$_EXTKEY] = array (
-	'title' => 'Lock TypoScript Templates',
-	'description' => 'A simple write protection for TypoScript Templates.',
-	'category' => 'be',
-	'version' => '2.2.1',
-	'state' => 'stable',
-	'uploadfolder' => 0,
-	'createDirs' => '',
-	'clearcacheonload' => 0,
-	'author' => 'Sven Juergens',
-	'author_email' => 't3@blue-side.de',
-	'author_company' => '',
-	'constraints' =>
-	array (
-		'depends' =>
-		array (
-			'typo3' => '6.2.0-7.9.99',
-		),
-		'conflicts' =>
-		array (
-		),
-		'suggests' =>
-		array (
-		),
-	),
-);
+$EM_CONF[$_EXTKEY] =  [
+    'title' => 'Lock TypoScript Templates',
+    'description' => 'A simple write protection for TypoScript Templates.',
+    'category' => 'be',
+    'version' => '2.2.1',
+    'state' => 'stable',
+    'uploadfolder' => 0,
+    'createDirs' => '',
+    'clearcacheonload' => 0,
+    'author' => 'Sven Juergens',
+    'author_email' => 't3@blue-side.de',
+    'author_company' => '',
+    'constraints' =>
+     [
+        'depends' =>
+         [
+            'typo3' => '6.2.0-7.9.99',
+        ],
+        'conflicts' =>
+         [
+        ],
+        'suggests' =>
+         [
+        ],
+    ],
+];
