@@ -14,7 +14,7 @@ $EM_CONF[$_EXTKEY] =  [
     'title' => 'Lock TypoScript Templates',
     'description' => 'A simple write protection for TypoScript Templates.',
     'category' => 'be',
-    'version' => '2.2.1',
+    'version' => '2.2.2',
     'state' => 'stable',
     'uploadfolder' => 0,
     'createDirs' => '',
@@ -26,7 +26,7 @@ $EM_CONF[$_EXTKEY] =  [
      [
         'depends' =>
          [
-            'typo3' => '6.2.0-7.9.99',
+            'typo3' => '6.2.0-8.7.99',
         ],
         'conflicts' =>
          [
