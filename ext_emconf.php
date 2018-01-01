@@ -16,12 +16,9 @@ $EM_CONF[$_EXTKEY] =  [
     'category' => 'be',
     'version' => '3.0.0',
     'state' => 'stable',
-    'uploadfolder' => 0,
-    'createDirs' => '',
     'clearcacheonload' => 0,
     'author' => 'Sven Juergens',
     'author_email' => 't3@blue-side.de',
-    'author_company' => '',
     'constraints' =>
      [
         'depends' =>
