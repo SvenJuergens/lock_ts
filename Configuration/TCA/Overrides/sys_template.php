@@ -1,6 +1,5 @@
 <?php
-
-defined('TYPO3_MODE') or die();
+defined('TYPO3_MODE') || die();
 
 $tempColumns =  [
     'tx_lockts_lock' =>  [
@@ -13,5 +12,11 @@ $tempColumns =  [
     ],
 ];
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('sys_template', $tempColumns);
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('sys_template', 'tx_lockts_lock;;;;1-1-1');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns(
+    'sys_template',
+    $tempColumns
+);
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
+    'sys_template',
+    'tx_lockts_lock'
+);

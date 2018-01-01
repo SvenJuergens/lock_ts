@@ -1,5 +1,5 @@
 <?php
-namespace SvenJuergens\Form\Element;
+namespace SvenJuergens\LockTs\Form\Element;
 
 /*
  * This file is part of the TYPO3 CMS project.
@@ -22,14 +22,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class LockTsElement extends AbstractFormElement
 {
-
-    /**
-     * Path to the locallang file
-     *
-     * @var string
-     */
-    const LLPATH = 'LLL:EXT:lock_ts/Resources/Private/Language/locallang_db.xlf:';
-
     public $resultArray;
 
     /**
@@ -42,7 +34,9 @@ class LockTsElement extends AbstractFormElement
         $this->resultArray = $this->initializeResultArray();
         if ((int)$this->data['databaseRow']['tx_lockts_lock'] === 1) {
             $replaceText = '<strong class="btn">';
-            $replaceText .= htmlspecialchars($GLOBALS['LANG']->sL(self::LLPATH . 'sys_template.replacedSubmitText'));
+            $replaceText .= htmlspecialchars(
+                $this->getLanguageService()->sL('LLL:EXT:lock_ts/Resources/Private/Language/locallang_db.xlf:sys_template.replacedSubmitText')
+            );
             $replaceText .= '</strong>';
             $replaceText = GeneralUtility::quoteJSvalue($replaceText);
 
@@ -52,7 +46,6 @@ class LockTsElement extends AbstractFormElement
 		    	});
 	    	';
         }
-
         return $this->resultArray;
     }
 }
