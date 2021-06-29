@@ -15,7 +15,6 @@
         "typo3/cms-core": "^8.7"
     },
     "replace": {
-        "lock_ts": "self.version",
         "typo3-ter/lock_ts": "self.version"
     },
     "autoload": {
